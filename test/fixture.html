@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自定义映射测试页</title>
+<style>body{font:16px system-ui;max-width:720px;margin:40px auto;padding:20px;color:#1e293b}label{display:block;margin:20px 0 8px}input,textarea,[contenteditable]{font:inherit;box-sizing:border-box;width:100%;border:1px solid #94a3b8;border-radius:6px;padding:12px}button{margin-top:20px;padding:12px}small{color:#64748b}</style></head>
+<body><h1>测试：网页名称与统一字段不同</h1><p>打开插件，把「主题」绑定为「标题」，把「正文」绑定为「简介」。刷新后填写，检查下面事件记录。</p>
+<form><label for="subject">主题</label><input id="subject" name="subject" maxlength="80" placeholder="请填写主题">
+<label for="body">正文</label><textarea id="body" name="body" rows="4" placeholder="请填写正文"></textarea>
+<label for="keywords">关键词</label><input id="keywords" placeholder="请填写关键词">
+<label for="rich">补充内容（可编辑区域）</label><div id="rich" contenteditable="true" role="textbox" aria-label="补充内容"></div>
+<label for="secret">密码（不支持绑定）</label><input id="secret" type="password">
+<label for="video">视频（手动选择）</label><input id="video" type="file" accept="video/*">
+<button id="submit" type="submit">模拟发布（只计数，不联网）</button></form>
+<p>发布点击次数：<span id="count">0</span></p><pre id="events"></pre>
+<script>
+window.submitCount=0;window.events=[];
+document.querySelector('form').onsubmit=e=>{e.preventDefault();document.querySelector('#count').textContent=++window.submitCount};
+for(const name of ['input','change','blur']) document.addEventListener(name,e=>{window.events.push(e.target.id+':'+name);document.querySelector('#events').textContent=window.events.slice(-12).join('\n')},true);
+</script></body></html>
