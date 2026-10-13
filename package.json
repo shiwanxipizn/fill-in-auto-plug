@@ -1,0 +1,6 @@
+{
+  "name": "auto-fill-extension",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node test/rules.test.js && node test/mappings.test.js
