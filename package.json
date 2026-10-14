@@ -7,5 +7,7 @@
     "test:e2e": "playwright test",
     "demo": "node test/serve.js"
   },
-  "devDependencies": { "@playwright/test": "^1.64.0" }
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
 }

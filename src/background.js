@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
       key = pageKey(sender.url);
       if (key !== message.pageKey || typeof message.binding?.selector !== 'string') throw new Error('页面已变化，请重新绑定');
     } else {
-      if (sender.tab) throw new Error('请从侧栏管理规则');
+      if (!sender.url?.startsWith(chrome.runtime.getURL(''))) throw new Error('请从侧栏管理规则');
       key = pageKey(message.pageKey);
     }
     const { mappings = {} } = await chrome.storage.local.get('mappings');

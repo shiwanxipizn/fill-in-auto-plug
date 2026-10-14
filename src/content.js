@@ -10,16 +10,16 @@
   const visible = el => !!el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden';
   const writable = el => supported(el) && visible(el) && !el.disabled && !el.readOnly;
   const currentKey = () => location.origin + location.pathname + (/^#!?\//.test(location.hash) ? location.hash.split('?')[0] : '');
-  const attributeNames = ['id', 'name', 'placeholder', 'aria-label', 'data-testid', 'role', 'type'];
+  const attributeNames = ['name', 'data-testid', 'aria-label', 'placeholder', 'id', 'role', 'type'];
   const quote = value => '"' + value.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\a ').replace(/\r/g, '\\d ') + '"';
 
   function bindingFor(el) {
-    let selector;
+    let selector, locatorAttribute;
     for (const attr of attributeNames) {
       const value = el.getAttribute(attr);
       if (!value) continue;
       const candidate = `${el.localName}[${attr}=${quote(value)}]`;
-      if (document.querySelectorAll(candidate).length === 1) { selector = candidate; break; }
+      if (document.querySelectorAll(candidate).length === 1) { selector = candidate; locatorAttribute = attr; break; }
     }
     // Structural fallback for unlabeled fields; verify attributes again before filling.
     if (!selector) {
@@ -32,9 +32,11 @@
     }
     return {
       selector, tag: el.localName,
-      attributes: Object.fromEntries(attributeNames.map(key => [key, el.getAttribute(key)])),
+      attributes: Object.fromEntries(attributeNames.filter(key => key !== 'id' || locatorAttribute === 'id').map(key => [key, el.getAttribute(key)])),
+      labelText: [...(el.labels || [])].map(label => label.textContent.trim()).join(' '),
+      structural: !locatorAttribute,
       label: el.labels?.[0]?.textContent.trim() || el.getAttribute('aria-label') || el.getAttribute('placeholder') || el.localName,
-      maxLength: el.maxLength > 0 ? el.maxLength : null
+      maxLength: el.maxLength >= 0 ? el.maxLength : null
     };
   }
 
@@ -49,6 +51,7 @@
     if (el.localName !== binding.tag || Object.entries(binding.attributes || {}).some(([key, value]) => el.getAttribute(key) !== value)) {
       throw new Error('页面字段属性已变化，请重新绑定');
     }
+    if (binding.labelText && [...(el.labels || [])].map(label => label.textContent.trim()).join(' ') !== binding.labelText) throw new Error('字段标签已变化，请重新绑定');
     if (!writable(el)) throw new Error('元素不可编辑、被隐藏或已禁用');
     return el;
   }
@@ -85,7 +88,7 @@
     const root = host.attachShadow({ mode: 'closed' });
     const box = document.createElement('div'), tip = document.createElement('div');
     box.style.cssText = 'position:fixed;border:3px solid #2563eb;border-radius:4px;box-sizing:border-box;display:none;background:#2563eb18';
-    tip.style.cssText = 'position:fixed;top:12px;left:12px;max-width:480px;padding:12px 18px;background:#172554;color:white;border-radius:8px;font:14px/1.6 system-ui';
+    tip.style.cssText = 'position:fixed;top:12px;left:50%;transform:translateX(-50%);width:max-content;max-width:min(480px,calc(100vw - 24px));box-sizing:border-box;overflow-wrap:anywhere;padding:12px 18px;background:#172554;color:white;border-radius:8px;font:14px/1.6 system-ui';
     tip.textContent = `点击网页输入框，绑定为「${message.label}」。Esc 取消（60 秒后自动退出）。`;
     root.append(box, tip); document.documentElement.append(host);
     function target(event) {
@@ -122,6 +125,7 @@
       document.removeEventListener('mousedown', block, true);
       document.removeEventListener('keydown', cancelKey, true);
       stopPicker = undefined;
+      chrome.runtime.sendMessage({ type: 'picker-ended' }).catch(() => {});
     };
     document.addEventListener('pointermove', move, true);
     document.addEventListener('click', pick, true);
@@ -142,8 +146,8 @@
         if (currentKey() !== message.pageKey) throw new Error('页面已变化，停止填写');
         if (targets.has(el)) throw new Error('多个字段绑定到同一元素，请修正规则');
         targets.add(el);
-        const limit = el.maxLength > 0 ? el.maxLength : item.binding.maxLength;
-        if (limit && item.value.length > limit) throw new Error(`内容超过页面 ${limit} 字限制，未填写`);
+        const limit = el.maxLength >= 0 ? el.maxLength : item.binding.maxLength;
+        if (limit != null && item.value.length > limit) throw new Error(`内容超过页面 ${limit} 字限制，未填写`);
         setValue(el, item.value);
         await new Promise(resolve => setTimeout(resolve, 100));
         const actual = el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement ? el.value : el.textContent;

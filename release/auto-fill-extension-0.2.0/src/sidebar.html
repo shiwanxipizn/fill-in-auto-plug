@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>内容自动填写</title><link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+  <main>
+    <header><p>统一内容，快速填写。</p></header>
+    <form id="editor" autocomplete="off">
+      <div id="content-fields"></div>
+      <p id="empty-fields" class="meta">绑定网页字段后，在这里编辑内容。</p>
+      <div class="form-field">
+        <label for="field">添加或重新绑定字段</label>
+        <select id="field" disabled>
+          <option value="title">标题</option><option value="subtitle">副标题</option>
+          <option value="description">简介</option><option value="topics">话题</option>
+          <option value="tags">标签</option><option value="vehicle">车型</option><option value="location">地点</option>
+        </select>
+      </div>
+      <div class="actions">
+        <button type="button" id="pick" class="secondary" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3H5a2 2 0 0 0-2 2v4m12-6h4a2 2 0 0 1 2 2v4M3 15v4a2 2 0 0 0 2 2h4m6-12 6 6-4 1-1 4-6-11Z"/></svg>
+          <span id="pick-label">绑定元素</span>
+        </button>
+        <button type="button" id="fill" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-9 12h7l-1 8 10-12h-7l1-8Z"/></svg>
+          <span id="fill-label">一键填写</span>
+        </button>
+      </div>
+    </form>
+    <div id="status" role="status" aria-live="polite" hidden></div>
+    <details id="rules">
+      <summary><span>网站规则</span><span id="rule-count">0</span></summary>
+      <div class="rule-section">
+        <p id="platform">读取中…</p><p id="scope" class="meta"></p>
+        <div id="bindings"></div>
+      </div>
+      <details id="saved-rules"><summary>其他已保存规则</summary><div id="all-rules"></div></details>
+    </details>
+    <footer id="save-state" aria-live="polite">内容自动保存，填写后请核对。</footer>
+  </main>
+  <script type="module" src="sidebar.js"></script>
+</body>
+</html>

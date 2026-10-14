@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "内容一键填写",
+  "version": "0.2.0",
+  "minimum_chrome_version": "114",
+  "description": "点选网页字段，保存本地映射，一键填写统一内容。",
+  "permissions": ["storage", "tabs", "scripting", "sidePanel"],
+  "optional_host_permissions": ["https://*/*", "http://*/*"],
+  "host_permissions": [
+    "https://weibo.com/*", "https://*.weibo.com/*",
+    "https://baijiahao.baidu.com/*", "https://*.baijiahao.baidu.com/*",
+    "https://tv.sohu.com/*", "https://*.sohu.com/*"
+  ],
+  "background": { "service_worker": "src/background.js", "type": "module" },
+  "side_panel": { "default_path": "src/sidebar.html" },
+  "action": { "default_title": "打开自动填写侧栏" },
+  "content_scripts": [{
+    "matches": ["https://weibo.com/*", "https://*.weibo.com/*", "https://baijiahao.baidu.com/*", "https://*.baijiahao.baidu.com/*", "https://tv.sohu.com/*", "https://*.sohu.com/*"],
+    "js": ["src/content.js"], "run_at": "document_idle"
+  }]
+}

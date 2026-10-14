@@ -1,4 +1,71 @@
-:root{font-family:system-ui,"Microsoft YaHei",sans-serif;color:#1e293b;background:#f4f7fb;font-size:14px}
-*{box-sizing:border-box}body{margin:0;padding:18px;min-width:280px}header{display:flex;align-items:center;justify-content:space-between;gap:8px}h1{font-size:20px;margin:0}h2{font-size:15px;margin:0 0 12px}.badge{font-size:11px;white-space:nowrap;border-radius:20px;padding:4px 8px;background:#dbeafe;color:#1e40af}
-section,form,body>details{background:white;border:1px solid #dce3ed;border-radius:10px;padding:14px;margin:14px 0}label{display:block;margin:12px 0 5px;font-weight:600}input,textarea,select{font:inherit;width:100%;padding:9px;border:1px solid #bdc9d9;border-radius:6px;background:white;color:inherit}textarea{resize:vertical}input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
-button{font:inherit;width:100%;padding:10px;border:0;border-radius:6px;background:#2563eb;color:white;font-weight:600;margin-top:10px;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.secondary{background:#eaf0ff;color:#1e40af}.quiet{background:transparent;color:#475569;font-weight:400;padding:5px}.hint{font-size:12px;color:#64748b;line-height:1.7;overflow-wrap:anywhere}.rule{padding:9px 0;border-top:1px solid #e2e8f0;overflow-wrap:anywhere}.rule small{display:block;color:#64748b;white-space:pre-wrap}.remove{width:auto;font-size:12px;background:#fff1f2;color:#be123c;padding:4px 8px;font-weight:400;margin-top:5px}summary{cursor:pointer;color:#475569}details{margin-top:12px}#status{white-space:pre-wrap;line-height:1.8;border-left:3px solid #2563eb;padding-left:10px;font-size:13px}#scope{margin-bottom:0}
+:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, Inter, "Segoe UI", sans-serif;
+  font-size: 14px;
+  color: #0f172a;
+  background: #fff;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #3b82f6;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; padding: 16px; text-align: left; }
+main, form, #content-fields { display: flex; flex-direction: column; gap: 12px; }
+#content-fields:empty { display: none; }
+p { margin: 0; }
+header p { font-size: 14px; line-height: 20px; color: var(--muted); }
+.form-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.field-actions { display: flex; justify-content: flex-end; gap: 6px; }
+label { font-size: 12px; line-height: 16px; color: var(--muted); }
+textarea, select {
+  display: block; width: 100%; height: 36px; min-height: 36px; margin: 0;
+  border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px;
+  background: #fff; color: #0f172a; font: inherit; line-height: 20px;
+  transition: border-color .12s, box-shadow .12s;
+}
+textarea { resize: none; overflow-y: hidden; }
+textarea::placeholder { color: #94a3b8; }
+select { cursor: pointer; }
+textarea:hover:not(:disabled), select:hover:not(:disabled) { border-color: #94a3b8; }
+textarea:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px #3b82f626; }
+textarea:disabled, select:disabled { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
+textarea[aria-invalid="true"], textarea[aria-invalid="true"]:hover:not(:disabled) { border-color: #dc2626; }
+textarea[aria-invalid="true"]:focus { border-color: #dc2626; box-shadow: 0 0 0 2px #dc26261a; }
+.error-text { color: #dc2626; font-size: 12px; line-height: 18px; }
+.actions { display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+button {
+  display: inline-flex; align-items: center; justify-content: flex-start; gap: 6px;
+  height: 36px; padding: 0 12px; border: 1px solid transparent; border-radius: 6px;
+  background: var(--primary); color: #fff; font: inherit; font-size: 13px; font-weight: 500;
+  text-align: left; white-space: nowrap; cursor: pointer; transition: background .12s, border-color .12s;
+}
+button:hover:not(:disabled) { background: #3575dd; }
+button.secondary { background: transparent; border-color: var(--border); color: #334155; }
+button.secondary:hover:not(:disabled) { background: #f8fafc; border-color: #cbd5e1; }
+button:focus-visible, summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+button:disabled { background: #e2e8f0; color: #94a3b8; border-color: #e2e8f0; cursor: not-allowed; }
+button.secondary:disabled { background: transparent; color: #94a3b8; border-color: #e2e8f0; }
+svg { width: 16px; height: 16px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+#status { font-size: 12px; line-height: 18px; color: var(--muted); white-space: pre-wrap; overflow-wrap: anywhere; }
+#status[data-error="true"] { color: #dc2626; }
+#rules { border: 1px solid var(--border); border-radius: 8px; }
+summary { padding: 10px 12px; font-size: 12px; line-height: 16px; color: var(--muted); cursor: pointer; border-radius: 8px; overflow-wrap: anywhere; }
+summary:hover { background: #f8fafc; color: #0f172a; }
+#rule-count { margin-left: 6px; font-variant-numeric: tabular-nums; }
+.rule-section { padding: 0 12px 12px; }
+#platform { font-size: 12px; line-height: 18px; overflow-wrap: anywhere; }
+.meta { font-size: 12px; color: var(--muted); line-height: 18px; overflow-wrap: anywhere; }
+#bindings, #all-rules { font-size: 12px; color: var(--muted); }
+#bindings { margin-top: 12px; }
+.rule { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--border); }
+.rule strong { font-size: 12px; font-weight: 500; color: #334155; overflow-wrap: anywhere; }
+.remove { background: transparent; color: var(--muted); border: 1px solid var(--border); height: 28px; font-size: 12px; padding: 0 8px; }
+.remove:hover:not(:disabled) { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+.field-actions button { height: 24px; padding: 0 8px; font-size: 12px; font-weight: 400; }
+#saved-rules { border-top: 1px solid var(--border); }
+#all-rules { padding: 0 12px 12px; }
+#all-rules summary { padding-left: 0; }
+footer { font-size: 12px; line-height: 18px; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

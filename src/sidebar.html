@@ -5,41 +5,41 @@
   <title>内容自动填写</title><link rel="stylesheet" href="sidebar.css">
 </head>
 <body>
-  <header><h1>内容自动填写</h1><span class="badge">本地规则</span></header>
-  <p class="hint">编辑一次内容，为不同网站绑定字段。填写会替换已绑定字段的现有文字，请检查后自行提交。</p>
-  <section aria-labelledby="page-heading">
-    <h2 id="page-heading">当前页面</h2><div id="platform">读取中…</div><p id="scope" class="hint"></p>
-  </section>
-  <form id="editor" autocomplete="off">
-    <label for="title">标题</label><input id="title" placeholder="各网站共用的标题">
-    <label for="description">简介</label><textarea id="description" rows="4" placeholder="内容介绍"></textarea>
-    <label for="topics">话题（空格分隔）</label><input id="topics" placeholder="新能源 试驾">
-    <details><summary>更多内容字段</summary>
-      <label for="subtitle">副标题</label><input id="subtitle">
-      <label for="tags">标签（空格分隔）</label><input id="tags">
-      <label for="vehicle">车型</label><input id="vehicle">
-      <label for="location">地点</label><input id="location">
+  <main>
+    <header><p>统一内容，快速填写。</p></header>
+    <form id="editor" autocomplete="off">
+      <div id="content-fields"></div>
+      <p id="empty-fields" class="meta">绑定网页字段后，在这里编辑内容。</p>
+      <div class="form-field">
+        <label for="field">添加或重新绑定字段</label>
+        <select id="field" disabled>
+          <option value="title">标题</option><option value="subtitle">副标题</option>
+          <option value="description">简介</option><option value="topics">话题</option>
+          <option value="tags">标签</option><option value="vehicle">车型</option><option value="location">地点</option>
+        </select>
+      </div>
+      <div class="actions">
+        <button type="button" id="pick" class="secondary" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3H5a2 2 0 0 0-2 2v4m12-6h4a2 2 0 0 1 2 2v4M3 15v4a2 2 0 0 0 2 2h4m6-12 6 6-4 1-1 4-6-11Z"/></svg>
+          <span id="pick-label">绑定元素</span>
+        </button>
+        <button type="button" id="fill" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-9 12h7l-1 8 10-12h-7l1-8Z"/></svg>
+          <span id="fill-label">一键填写</span>
+        </button>
+      </div>
+    </form>
+    <div id="status" role="status" aria-live="polite" hidden></div>
+    <details id="rules">
+      <summary><span>网站规则</span><span id="rule-count">0</span></summary>
+      <div class="rule-section">
+        <p id="platform">读取中…</p><p id="scope" class="meta"></p>
+        <div id="bindings"></div>
+      </div>
+      <details id="saved-rules"><summary>其他已保存规则</summary><div id="all-rules"></div></details>
     </details>
-    <button type="button" id="fill" disabled>一键填写当前页面</button>
-    <button type="button" id="save" class="secondary" disabled>保存草稿</button>
-    <p class="hint">草稿自动保存；空内容跳过，不清空网页字段。</p>
-  </form>
-  <section aria-labelledby="binding-heading">
-    <h2 id="binding-heading">为当前页面绑定字段</h2>
-    <label for="field">网页上的这个输入框，用来填写</label>
-    <select id="field">
-      <option value="title">标题</option><option value="subtitle">副标题</option>
-      <option value="description">简介</option><option value="topics">话题</option>
-      <option value="tags">标签</option><option value="vehicle">车型</option><option value="location">地点</option>
-    </select>
-    <button type="button" id="pick" class="secondary" disabled>点选网页元素并绑定</button>
-    <button type="button" id="cancel" class="quiet">退出点选</button>
-    <p class="hint">点击按钮后，在网页上点击目标文本框。按 Esc 可取消；首次使用需允许访问该站点。每个统一字段绑定一个元素，重新点选会替换绑定。</p>
-    <div id="bindings"></div>
-  </section>
-  <details><summary>已保存的网站规则</summary><div id="all-rules"></div></details>
-  <div id="status" role="status" aria-live="polite"></div>
-  <p class="hint">支持文本框、文本域和普通可编辑区域。文件上传、下拉选择、特殊富文本编辑器、iframe 和 Shadow DOM 内字段需单独适配。不会点击发布。</p>
+    <footer id="save-state" aria-live="polite">内容自动保存，填写后请核对。</footer>
+  </main>
   <script type="module" src="sidebar.js"></script>
 </body>
 </html>
